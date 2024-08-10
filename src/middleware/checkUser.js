@@ -9,7 +9,7 @@ const checkUser = handleError(async (req, res, next) => {
   let user = await userModel.findOne({ email });
 
   if (user) {
-     next(new AppError("this email is already exist", 400))
+    next(new AppError("this email is already exist", 400));
   } else {
     req.body.password = bcrypt.hashSync(req.body.password, 5);
     next();
