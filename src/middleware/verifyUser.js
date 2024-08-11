@@ -6,11 +6,14 @@ const verifyUser = (req, res, next) => {
 
   jwt.verify(token, "token", async (error, decoded) => {
     if (error) {
-      return next(new AppError(error, 404));
+      return next(new AppError("invalid user", 404));
     } else {
+      console.log(decoded);
+        req.user = decoded
+        
       next();
     }
   });
-};
+}
 
 export default verifyUser

@@ -42,6 +42,8 @@ const userSchema = new mongoose.Schema({
     enums: ["online", "offline"],
     default: "offline",
   },
+  otpCode :String,
+  otpExpire: Date
 });
 
 const userModel = mongoose.model("user", userSchema);
