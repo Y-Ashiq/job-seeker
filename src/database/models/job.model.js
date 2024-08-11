@@ -16,7 +16,7 @@ const jobSchema = new mongoose.Schema({
   },
   seniorityLevel: {
     type: String,
-    enums:["junior", "mid-level","senior","team-lead","CTO"]
+    enums: ["junior", "mid-level", "senior", "team-lead", "CTO"],
   },
   jobDescription: {
     type: String,
@@ -24,12 +24,10 @@ const jobSchema = new mongoose.Schema({
     required: true,
   },
   technicalSkills: {
-    type: []
-
+    type: [],
   },
   softSkills: {
-    type: []
-
+    type: [],
   },
   addedBy: {
     type: [mongoose.Types.ObjectId],

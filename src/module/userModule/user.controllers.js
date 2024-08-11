@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendEmail from "../../utility/sendEmail.js";
 
+
+
 //*************************************************************************** */
 //                                sign up                                    //
 //*************************************************************************** */
@@ -33,10 +35,11 @@ const signIn = handleError(async (req, res, next) => {
   });
 
   if (isExist.length > 0 && bcrypt.compareSync(password, isExist[0].password)) {
-    let token = jwt.sign({ id: isExist[0]._id }, "token");
+    let token = jwt.sign({ id: isExist[0]._id ,role:isExist[0].role}, "token");
+    await userModel.findByIdAndUpdate(isExist[0]._id ,{status:"online"})
     res.status(200).json({ message: "welcome", token });
   } else {
-    next(new AppError("incorrect email or password", 400));
+    next(new AppError("incorrect  credentials or password", 400));
   }
 });
 
@@ -56,19 +59,10 @@ const updateUser = handleError(async (req, res, next) => {
   }
   if (req.body.mobileNumber) {
     let mobileNumber = await userModel.findOne({
-      email: req.body.mobileNumber,
+      mobileNumber: req.body.mobileNumber,
     });
 
     if (mobileNumber) {
-      return next(new AppError("this mobileNumber is already exist", 400));
-    }
-  }
-  if (req.body.recoveryEmail) {
-    let recoveryEmail = await userModel.findOne({
-      email: req.body.recoveryEmail,
-    });
-
-    if (recoveryEmail) {
       return next(new AppError("this mobileNumber is already exist", 400));
     }
   }

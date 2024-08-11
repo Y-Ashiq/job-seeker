@@ -8,7 +8,7 @@ const verifyUser = (req, res, next) => {
     if (error) {
       return next(new AppError("invalid user", 404));
     } else {
-      console.log(decoded);
+
         req.user = decoded
         
       next();

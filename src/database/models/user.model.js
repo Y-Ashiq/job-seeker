@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
+    required: true,
   },
   password: {
     type: String,
@@ -42,8 +43,8 @@ const userSchema = new mongoose.Schema({
     enums: ["online", "offline"],
     default: "offline",
   },
-  otpCode :String,
-  otpExpire: Date
+  otpCode: String,
+  otpExpire: Date,
 });
 
 const userModel = mongoose.model("user", userSchema);

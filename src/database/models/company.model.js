@@ -15,7 +15,8 @@ const companySchema = new mongoose.Schema({
     required: true,
   },
   numberOfEmployees: {
-    type: Number,
+    type: String,
+    enums: ["1-10", "11-20", "21-50", "51-100", "101-200"],
   },
   companyEmail: {
     type: String,
@@ -23,7 +24,7 @@ const companySchema = new mongoose.Schema({
     required: true,
   },
   companyHR: {
-    type: [mongoose.Types.ObjectId],
+    type: mongoose.Types.ObjectId,
     ref: "user",
   },
 });
