@@ -20,7 +20,6 @@ const jobSchema = new mongoose.Schema({
   },
   jobDescription: {
     type: String,
-    unique: true,
     required: true,
   },
   technicalSkills: {
@@ -30,7 +29,7 @@ const jobSchema = new mongoose.Schema({
     type: [],
   },
   addedBy: {
-    type: [mongoose.Types.ObjectId],
+    type: mongoose.Types.ObjectId,
     ref: "user",
   },
 });
