@@ -8,7 +8,7 @@ const jobSchema = Joi.object({
   seniorityLevel: Joi.string()
     .valid("junior", "mid-level", "senior", "team-lead", "CTO")
     .required(),
-  jobDescription: Joi.string().required(),
+  jobDescription: Joi.string(),
   technicalSkills: Joi.array().items(Joi.string()),
   softSkills: Joi.array().items(Joi.string()),
   addedBy: Joi.string().length(24).required(),

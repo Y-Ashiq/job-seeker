@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
   jobId: {
-    type: [mongoose.Types.ObjectId],
+    type: mongoose.Types.ObjectId,
     ref: "job",
   },
 
   userId: {
-    type: [mongoose.Types.ObjectId],
+    type: mongoose.Types.ObjectId,
     ref: "user",
   },
   userTechSkills: {
@@ -18,8 +18,7 @@ const applicationSchema = new mongoose.Schema({
   },
   userResume: {
     type: String,
-    unique: true,
-    required: true,
+   
   },
 });
 

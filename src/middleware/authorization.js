@@ -7,13 +7,16 @@ export const authorization = (req, res, next) => {
 
   jwt.verify(token, "token", async (error, decoded) => {
     if (!error) {
+      
       if (decoded.role === "HR") {
-        if (req.param.id) {
+        if (req.params.id) {
           let companyOwner = await companyModel.find({
             companyHR: decoded.id,
           });
+          
+          req.company =companyOwner;
           if (companyOwner[0] === undefined) {
-            next(new AppError("you are not authorized for this", 404));
+            next(new AppError("no data", 404));
           } else {
             next();
           }

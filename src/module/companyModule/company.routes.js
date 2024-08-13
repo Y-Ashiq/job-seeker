@@ -12,6 +12,9 @@ const companyRouter = Router()
 
 
 companyRouter.post('/addCompany' ,validation(companySchema),verifyUser,authorization, companyControllers.addCompany)
+companyRouter.get('/getCompanyJobs/:id' ,verifyUser, companyControllers.getCompanyJobs)
+companyRouter.get('/getApplications/:id' ,verifyUser,authorization, companyControllers.getApplications)
+companyRouter.get('/getCompany/:name' ,verifyUser,authorization, companyControllers.getCompany)
 companyRouter.put('/updateCompany/:id' ,verifyUser,authorization, companyControllers.updateCompany)
 companyRouter.delete('/deleteCompany/:id' ,verifyUser,authorization, companyControllers.deleteCompany)
 

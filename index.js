@@ -11,7 +11,8 @@ app.use(express.json());
 connectDB;
 app.use(userRouter);
 app.use(companyRouter);
-app.use(jobRouter)
+app.use(jobRouter);
+app.use("/uploads", express.static("uploads"));
 
 app.use("**", (req, res, next) => {
   next(new AppError(`invalid url ${req.originalUrl}`, 404));

@@ -12,6 +12,8 @@ const jobSchema = new mongoose.Schema({
   },
   workingTime: {
     type: String,
+    enums: ["partTime", "fullTime"],
+
     required: true,
   },
   seniorityLevel: {
@@ -19,9 +21,7 @@ const jobSchema = new mongoose.Schema({
     enums: ["junior", "mid-level", "senior", "team-lead", "CTO"],
   },
   jobDescription: {
-    type: String,
-    required: true,
-  },
+    type: String  },
   technicalSkills: {
     type: [],
   },
