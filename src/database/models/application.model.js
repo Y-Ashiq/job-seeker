@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import jobModel from "./job.model.js";
 
 const applicationSchema = new mongoose.Schema({
   jobId: {
@@ -21,6 +22,11 @@ const applicationSchema = new mongoose.Schema({
    
   },
 });
+
+applicationSchema.post("findOneAndDelete", async function (doc) {
+  await jobModel.deleteMany({ addedBy: doc._id });
+});
+
 
 const applicationModel = mongoose.model("application", applicationSchema);
 

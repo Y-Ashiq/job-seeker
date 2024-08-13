@@ -1,19 +1,19 @@
 import { createTransport } from "nodemailer";
+import 'dotenv/config';
+
 
 const transporter = createTransport({
   service: "gmail",
   auth: {
-    user: "yoyo127x@gmail.com",
-    pass: "xudm nkwv cqdw reem",
+    user: process.env.NODE_MAILER_EMAIL,
+    pass: process.env.NODE_MAILER_PASS
   },
 });
 
-// async..await is not allowed in global scope, must use a wrapper
 async function sendEmail(email,code) {
-  // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: '"reset password" <yoyo127x@gmail.com>', // sender address
-    to: email, // list of receivers
+    from: `"reset password" <${ process.env.NODE_MAILER_EMAIl}>`, // sender address
+    to: email, 
     subject: "Hello ✔",
     html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
   <div style="margin:50px auto;width:70%;padding:20px 0">

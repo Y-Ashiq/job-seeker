@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import companyModel from "./company.model.js";
+import applicationModel from "./application.model.js";
+import jobModel from "./job.model.js";
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -45,6 +48,11 @@ const userSchema = new mongoose.Schema({
   },
   otpCode: String,
   otpExpire: Date,
+});
+
+userSchema.post("findOneAndDelete", async function (doc) {
+  await jobModel.findOneAndDelete({ addedBy: doc._id });
+  await applicationModel.findOneAndDelete({ userId: doc._id });
 });
 
 const userModel = mongoose.model("user", userSchema);

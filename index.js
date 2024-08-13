@@ -4,8 +4,11 @@ import userRouter from "./src/module/userModule/user.routes.js";
 import { AppError } from "./src/utility/appError.js";
 import companyRouter from "./src/module/companyModule/company.routes.js";
 import jobRouter from "./src/module/jobModule/job.routes.js";
+
 const app = express();
 const port = 3000;
+
+
 
 app.use(express.json());
 connectDB;

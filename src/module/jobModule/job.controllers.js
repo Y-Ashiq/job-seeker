@@ -3,21 +3,43 @@ import jobModel from "../../database/models/job.model.js";
 import applicationModel from "../../database/models/application.model.js";
 import { handleError } from "../../middleware/handleError.js";
 
+//*************************************************************************** */
+/*                               add job 
+this function api to handle creation of the job in DB 
+//*************************************************************************** */
+
 const addJob = handleError(async (req, res, next) => {
   const job = await jobModel.create(req.body);
 
   res.status(200).json({ message: "job added", job });
 });
+
+//*************************************************************************** */
+/*                                update the job 
+//*************************************************************************** */
+
 const updateJob = handleError(async (req, res, next) => {
   const job = await jobModel.findByIdAndUpdate(req.params.id, req.body);
 
   res.status(200).json({ message: "job updated", job });
 });
+
+//*************************************************************************** */
+/*                               delete the job 
+//*************************************************************************** */
+
 const deleteJob = handleError(async (req, res, next) => {
   const job = await jobModel.findByIdAndDelete(req.params.id);
 
   res.status(200).json({ message: "job deleted", job });
 });
+
+//*************************************************************************** */
+/*                               get all job of the company
+used populate in addBy(hr) took the array of the jobModel.find() and loop
+in the array if the search is by name of the company with the string query or
+get all jobs of all the companies
+//*************************************************************************** */
 
 const getAllJob = handleError(async (req, res, next) => {
   const search = req.query.search;
@@ -51,8 +73,15 @@ const getAllJob = handleError(async (req, res, next) => {
   res.status(200).json({ message: "jobs", jobs });
 });
 
-
-
+//*************************************************************************** */
+/*                              filter the search by    
+ workingTime,
+    jobLocation,
+    seniorityLevel,
+    jobTitle,
+    technicalSkills
+    and  get all information of the company's job
+//*************************************************************************** */
 
 const filterJob = handleError(async (req, res, next) => {
   const {
@@ -90,8 +119,6 @@ const filterJob = handleError(async (req, res, next) => {
     })
     .lean();
 
-  console.log(findJob);
-
   const jobs = [];
 
   for (const key of findJob) {
@@ -106,24 +133,25 @@ const filterJob = handleError(async (req, res, next) => {
     }
   }
 
-  res.status(200).json({ message: "jobs" ,jobs});
+  res.status(200).json({ message: "jobs", jobs });
 });
 
-const applyJob =handleError(async(req,res) => {
+//*************************************************************************** */
+/*             job application using file upload
+//*************************************************************************** */
 
-  
-  
-  req.body.resumeUrl = req.file.filename
-  req.body.userTechSkills = JSON.parse(req.body.userTechSkills)
-  req.body.userSoftSkills = JSON.parse(req.body.userSoftSkills)
-  
-  
-  await applicationModel.insertMany(req.body)
-  
-  
+const applyJob = handleError(async (req, res) => {
+  if (req.user.role === "HR") {
+    return res.json("you are not allowed for this action");
+  }
 
-  res.status(200).json("done")
-  
-})
+  req.body.resumeUrl = req.file.filename;
+  req.body.userTechSkills = JSON.parse(req.body.userTechSkills);
+  req.body.userSoftSkills = JSON.parse(req.body.userSoftSkills);
 
-export default { addJob, updateJob, deleteJob, getAllJob, filterJob,applyJob };
+  await applicationModel.insertMany(req.body);
+
+  res.status(200).json("done");
+});
+
+export default { addJob, updateJob, deleteJob, getAllJob, filterJob, applyJob };

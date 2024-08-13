@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import 'dotenv/config';
+
 
 const connectDB = mongoose
-  .connect("mongodb://localhost:27017/jobSeeker")
+  .connect(process.env.DB_URI)
   .then(() => {
     console.log("database connected successfully");
   })

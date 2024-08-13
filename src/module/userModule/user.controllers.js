@@ -7,10 +7,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendEmail from "../../utility/sendEmail.js";
 
-
+import "dotenv/config";
 
 //*************************************************************************** */
-//                                sign up                                    //
+/*                               sign up 
+
+this function api to handle  the registration of the user
+and take the first and last namer concatenate it for useName key in the database
+
 //*************************************************************************** */
 
 const signUp = handleError(async (req, res) => {
@@ -24,7 +28,9 @@ const signUp = handleError(async (req, res) => {
 });
 
 //*************************************************************************** */
-//                                sign In                                     //
+/*                               sign In  
+function to handle user log in
+                                   
 //*************************************************************************** */
 
 const signIn = handleError(async (req, res, next) => {
@@ -35,8 +41,11 @@ const signIn = handleError(async (req, res, next) => {
   });
 
   if (isExist.length > 0 && bcrypt.compareSync(password, isExist[0].password)) {
-    let token = jwt.sign({ id: isExist[0]._id ,role:isExist[0].role}, "token");
-    await userModel.findByIdAndUpdate(isExist[0]._id ,{status:"online"})
+    let token = jwt.sign(
+      { id: isExist[0]._id, role: isExist[0].role },
+      process.env.SECRET_TOKEN
+    );
+    await userModel.findByIdAndUpdate(isExist[0]._id, { status: "online" });
     res.status(200).json({ message: "welcome", token });
   } else {
     next(new AppError("incorrect  credentials or password", 400));
@@ -44,7 +53,10 @@ const signIn = handleError(async (req, res, next) => {
 });
 
 //*************************************************************************** */
-//                                 update user                               //
+/*                                 update user 
+in the update user function it check if the req.body has email or mobilenumber existence
+to not make a conflict with other user
+
 //*************************************************************************** */
 
 const updateUser = handleError(async (req, res, next) => {
@@ -80,7 +92,9 @@ const updateUser = handleError(async (req, res, next) => {
   }
 });
 
-//*************************************************************************** */
+//***************************************************************************
+/*                                 delete user
+function to handle user delete
 //*************************************************************************** */
 
 const deleteUser = handleError(async (req, res, next) => {
@@ -89,7 +103,10 @@ const deleteUser = handleError(async (req, res, next) => {
   res.status(200).json({ message: "user deleted successfully", user });
 });
 
-//*************************************************************************** */
+//***************************************************************************
+/*                                 get user 
+only the owner of the account can get his account data by req.user.id that came from 
+userVerify 
 //*************************************************************************** */
 
 const getUser = handleError(async (req, res, next) => {
@@ -98,7 +115,11 @@ const getUser = handleError(async (req, res, next) => {
   res.json({ message: " user data", user });
 });
 
-//*************************************************************************** */
+//***************************************************************************
+/*                           update user password 
+
+the user send the old password and new password to update it in DB 
+and check of the old password encryption to compare 
 //*************************************************************************** */
 const updatePassword = handleError(async (req, res, next) => {
   if (req.body.password) {
@@ -119,7 +140,9 @@ const updatePassword = handleError(async (req, res, next) => {
 });
 
 //*************************************************************************** */
-//                                 reset password                             //
+/*                                 reset password        
+send to the user email the OTP   and change the otpCode in the DB to null after user
+successfully enter the OTP      in the verifyOTP function down               
 //*************************************************************************** */
 
 const sendOTP = handleError(async (req, res, next) => {
@@ -139,6 +162,10 @@ const sendOTP = handleError(async (req, res, next) => {
   }
 });
 
+//*************************************************************************** */
+/*                redirect the user to verify the OTP        
+//*************************************************************************** */
+
 const verifyOTP = handleError((req, res, next) => {
   let { token } = req.headers;
 
@@ -153,9 +180,9 @@ const verifyOTP = handleError((req, res, next) => {
 
       if (otpCode) {
         newPassword = bcrypt.hashSync(newPassword, 6);
-         await userModel.findOneAndUpdate(
+        await userModel.findOneAndUpdate(
           { email },
-          { $set: { password: newPassword, otpCode:null } }
+          { $set: { password: newPassword, otpCode: null } }
         );
 
         res.status(200).json({ message: "password updated" });

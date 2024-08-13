@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import userModel from "./user.model.js";
+import jobModel from "./job.model.js";
 
 const companySchema = new mongoose.Schema({
   companyName: {
@@ -28,6 +30,14 @@ const companySchema = new mongoose.Schema({
     ref: "user",
   },
 });
+
+companySchema.post("findOneAndDelete", async function (doc) {
+  await jobModel.deleteMany({ addedBy: doc.companyHR});
+  await userModel.findOneAndDelete({ _id: doc.companyHR });
+
+
+});
+
 
 const companyModel = mongoose.model("company", companySchema);
 

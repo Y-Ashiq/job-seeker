@@ -5,7 +5,7 @@ import companyModel from "../database/models/company.model.js";
 export const authorization = (req, res, next) => {
   let { token } = req.headers;
 
-  jwt.verify(token, "token", async (error, decoded) => {
+  jwt.verify(token,process.env.SECRET_TOKEN, async (error, decoded) => {
     if (!error) {
       
       if (decoded.role === "HR") {

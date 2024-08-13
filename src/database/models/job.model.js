@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import applicationModel from "./application.model.js";
 
 const jobSchema = new mongoose.Schema({
   jobTitle: {
@@ -21,7 +22,8 @@ const jobSchema = new mongoose.Schema({
     enums: ["junior", "mid-level", "senior", "team-lead", "CTO"],
   },
   jobDescription: {
-    type: String  },
+    type: String,
+  },
   technicalSkills: {
     type: [],
   },
@@ -32,6 +34,11 @@ const jobSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "user",
   },
+});
+
+jobSchema.post("findOneAndDelete", async function (doc) {
+
+  await applicationModel.findOneAndDelete({ jobId: doc._id });
 });
 
 const jobModel = mongoose.model("job", jobSchema);
